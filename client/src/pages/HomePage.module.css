@@ -232,3 +232,56 @@
 .ctaIcon  { color: rgba(255,255,255,.6); }
 .ctaTitle { font-family: var(--font-head); font-size: 1.75rem; font-weight: 700; color: #fff; }
 .ctaSub   { font-size: .95rem; color: rgba(255,255,255,.75); line-height: 1.6; }
+
+/* ── Mobile stats bar — just below navbar ── */
+.statsMobileBar {
+  display: flex;
+  justify-content: space-around;
+  background: var(--primary-dark);
+  padding: .5rem 1rem;
+  gap: .5rem;
+}
+@media (min-width: 769px) { .statsMobileBar { display: none; } }
+
+.statsMobileItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+.statsMobileValue {
+  font-family: var(--font-head);
+  font-size: .95rem;
+  font-weight: 800;
+  color: #fff;
+}
+.statsMobileLabel {
+  font-size: .62rem;
+  color: rgba(255,255,255,.6);
+  text-align: center;
+}
+
+/* ── Hide stats inside hero on mobile ── */
+@media (max-width: 768px) {
+  .stats { display: none; }
+  .heroBadge { display: none; }
+  .heroSub { font-size: .82rem; margin-bottom: 1rem; }
+  .heroTitle { font-size: clamp(1.4rem, 6vw, 1.8rem); }
+}
+
+/* ── Browse Deals button — hide on mobile ── */
+.heroBtnDesktop {
+  min-width: 145px;
+}
+@media (max-width: 768px) {
+  .heroBtnDesktop { display: none; }
+}
+
+/* ── Category grid — 4 columns on mobile for 8 categories ── */
+@media (max-width: 640px) {
+  .catGrid { grid-template-columns: repeat(4, 1fr); gap: .4rem; }
+  .catCard { padding: .6rem .4rem; align-items: center; text-align: center; }
+  .catIcon { font-size: 1.3rem; }
+  .catLabel { font-size: .65rem; font-weight: 700; }
+  .catSubs { display: none; }
+}
