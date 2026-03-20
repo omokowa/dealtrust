@@ -27,7 +27,7 @@
 .logoIcon {
   width: 30px;
   height: 30px;
-  background: var(--blue);
+  background: var(--primary);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -62,7 +62,7 @@
   transition: all .15s;
   white-space: nowrap;
 }
-.catLink:hover { background: var(--surface2); color: var(--text); }
+.catLink:hover { background: var(--primary-pale); color: var(--primary); }
 
 /* Search */
 .searchForm {
