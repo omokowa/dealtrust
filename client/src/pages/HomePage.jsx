@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { TrendingUp, Zap, Shield, Bell } from 'lucide-react'
+import { TrendingUp, Zap, Shield, Bell, Tag } from 'lucide-react'
 import { useDeals } from '../hooks/index.js'
-import { CATEGORIES, PLATFORMS } from '../utils/index.js'
+import { CATEGORIES } from '../utils/index.js'
 import DealGrid from '../components/DealGrid.jsx'
-import CategoryFilter from '../components/CategoryFilter.jsx'
 import styles from './HomePage.module.css'
 
 const PLATFORM_FILTERS = [
@@ -15,10 +14,17 @@ const PLATFORM_FILTERS = [
 ]
 
 const SORT_OPTIONS = [
-  { value: 'newest',   label: 'Newest' },
-  { value: 'discount', label: 'Biggest Discount' },
-  { value: 'score',    label: 'Best Deal Score' },
-  { value: 'price_asc',label: 'Price: Low → High' },
+  { value: 'newest',    label: 'Newest' },
+  { value: 'discount',  label: 'Biggest Discount' },
+  { value: 'score',     label: 'Best Deal Score' },
+  { value: 'price_asc', label: 'Price: Low → High' },
+]
+
+const TRUST_CARDS = [
+  { icon: '✅', title: 'Verified Deals Only', desc: 'Every deal checked against 30-day price history' },
+  { icon: '🎟', title: 'Real Coupon Codes',   desc: 'Codes tested before publishing — no expired ones' },
+  { icon: '🔔', title: 'Instant Alerts',      desc: 'Get notified on WhatsApp or email the moment a deal drops' },
+  { icon: '🛡', title: 'No Fake Prices',      desc: 'We verify the original price was not inflated before discount' },
 ]
 
 export default function HomePage() {
@@ -37,49 +43,68 @@ export default function HomePage() {
 
   return (
     <div>
-      {/* Hero */}
+      {/* ── Hero ── */}
       <section className={styles.hero}>
         <div className={styles.heroInner}>
-          <div className={styles.heroBadge}>
-            <Shield size={13} />
-            Nigeria's most trusted deal platform
+
+          {/* Left: text */}
+          <div className={styles.heroLeft}>
+            <div className={styles.heroBadge}>
+              <Shield size={13} />
+              Nigeria's most trusted deal platform
+            </div>
+            <h1 className={styles.heroTitle}>
+              Real deals.<br />
+              <span className={styles.heroAccent}>No fake discounts.</span>
+            </h1>
+            <p className={styles.heroSub}>
+              Every deal verified against 30-day price history.
+              No inflated prices. No expired coupons.
+              Genuine savings on Jumia, Konga and Temu.
+            </p>
+            <div className={styles.heroCtas}>
+              <Link to="/alerts" className={`btn btn-primary btn-lg ${styles.heroBtn}`}>
+                <Bell size={16} /> Get Deal Alerts
+              </Link>
+              <a href="#deals" className={`btn btn-ghost btn-lg ${styles.heroBtn}`}>
+                Browse Deals ↓
+              </a>
+            </div>
+            {/* Stats row */}
+            <div className={styles.stats}>
+              {[
+                { icon: <Shield size={15} />,    label: 'Verified today',     value: '120+' },
+                { icon: <Zap size={15} />,        label: 'Avg. discount',      value: '34%' },
+                { icon: <TrendingUp size={15} />, label: 'Saved by users',     value: '₦2.4M' },
+              ].map(s => (
+                <div key={s.label} className={styles.stat}>
+                  <div className={styles.statIcon}>{s.icon}</div>
+                  <div>
+                    <div className={styles.statValue}>{s.value}</div>
+                    <div className={styles.statLabel}>{s.label}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-          <h1 className={styles.heroTitle}>
-            Real deals.<br />
-            <span className={styles.heroAccent}>No fake discounts.</span>
-          </h1>
-          <p className={styles.heroSub}>
-            Every deal is verified against 30-day price history. No inflated "original" prices.
-            No expired coupons. Just genuine savings on Jumia, Konga and Temu.
-          </p>
-          <div className={styles.heroCtas}>
-            <Link to="/alerts" className={`btn btn-primary btn-lg ${styles.heroBtn}`}>
-              <Bell size={16} /> Get Deal Alerts
-            </Link>
-            <a href="#deals" className={`btn btn-ghost btn-lg ${styles.heroBtn}`}>
-              Browse Deals ↓
-            </a>
-          </div>
-          {/* Trust stats */}
-          <div className={styles.stats}>
-            {[
-              { icon: <Shield size={16} />,    label: 'Deals verified today',  value: '120+' },
-              { icon: <Zap size={16} />,        label: 'Avg. discount',         value: '34%' },
-              { icon: <TrendingUp size={16} />, label: 'Saved by users today',  value: '₦2.4M' },
-            ].map(s => (
-              <div key={s.label} className={styles.stat}>
-                <div className={styles.statIcon}>{s.icon}</div>
+
+          {/* Right: trust cards */}
+          <div className={styles.heroRight}>
+            {TRUST_CARDS.map(card => (
+              <div key={card.title} className={styles.trustCard}>
+                <span className={styles.trustIcon}>{card.icon}</span>
                 <div>
-                  <div className={styles.statValue}>{s.value}</div>
-                  <div className={styles.statLabel}>{s.label}</div>
+                  <div className={styles.trustTitle}>{card.title}</div>
+                  <div className={styles.trustDesc}>{card.desc}</div>
                 </div>
               </div>
             ))}
           </div>
+
         </div>
       </section>
 
-      {/* Category quick links */}
+      {/* ── Category cards ── */}
       <section className={styles.catSection}>
         <div className={styles.container}>
           <div className={styles.catGrid}>
@@ -98,14 +123,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Deals section */}
+      {/* ── Deals section ── */}
       <section className={styles.dealsSection} id="deals">
         <div className={styles.container}>
-
-          {/* Filter bar */}
           <div className={styles.filterBar}>
             <div className={styles.filterLeft}>
-              {/* Platform filter */}
               <div className={styles.pillGroup}>
                 {PLATFORM_FILTERS.map(p => (
                   <button
@@ -118,8 +140,6 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
-
-            {/* Sort */}
             <select
               className={styles.sortSelect}
               value={sort}
@@ -131,7 +151,6 @@ export default function HomePage() {
             </select>
           </div>
 
-          {/* Results header */}
           <div className={styles.resultsHeader}>
             <h2 className={styles.resultsTitle}>
               {category === 'all'
@@ -149,12 +168,12 @@ export default function HomePage() {
             deals={deals}
             loading={loading}
             error={error}
-            emptyMessage="No deals in this category right now. Try another filter or check back soon."
+            emptyMessage="No deals right now. Check back soon!"
           />
         </div>
       </section>
 
-      {/* Bottom CTA */}
+      {/* ── CTA ── */}
       <section className={styles.ctaSection}>
         <div className={styles.ctaInner}>
           <Bell size={28} className={styles.ctaIcon} />
