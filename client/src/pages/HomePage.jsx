@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { TrendingUp, Zap, Shield, Bell, Tag } from 'lucide-react'
+import { TrendingUp, Zap, Shield, Bell } from 'lucide-react'
 import { useDeals } from '../hooks/index.js'
 import { CATEGORIES } from '../utils/index.js'
 import DealGrid from '../components/DealGrid.jsx'
@@ -27,6 +27,12 @@ const TRUST_CARDS = [
   { icon: '🛡', title: 'No Fake Prices',      desc: 'We verify the original price was not inflated before discount' },
 ]
 
+const STATS = [
+  { icon: <Shield size={15} />,    label: 'Verified today',  value: '120+' },
+  { icon: <Zap size={15} />,       label: 'Avg. discount',   value: '34%' },
+  { icon: <TrendingUp size={15} />,label: 'Saved by users',  value: '₦2.4M' },
+]
+
 export default function HomePage() {
   const [category, setCategory] = useState('all')
   const [platform, setPlatform] = useState('all')
@@ -43,6 +49,17 @@ export default function HomePage() {
 
   return (
     <div>
+
+      {/* ── Stats bar — mobile only, just below navbar ── */}
+      <div className={styles.statsMobileBar}>
+        {STATS.map(s => (
+          <div key={s.label} className={styles.statsMobileItem}>
+            <span className={styles.statsMobileValue}>{s.value}</span>
+            <span className={styles.statsMobileLabel}>{s.label}</span>
+          </div>
+        ))}
+      </div>
+
       {/* ── Hero ── */}
       <section className={styles.hero}>
         <div className={styles.heroInner}>
@@ -62,21 +79,20 @@ export default function HomePage() {
               No inflated prices. No expired coupons.
               Genuine savings on Jumia, Konga and Temu.
             </p>
+
+            {/* Get Deal Alerts — show on mobile, hide Browse Deals on mobile */}
             <div className={styles.heroCtas}>
               <Link to="/alerts" className={`btn btn-primary btn-lg ${styles.heroBtn}`}>
                 <Bell size={16} /> Get Deal Alerts
               </Link>
-              <a href="#deals" className={`btn btn-ghost btn-lg ${styles.heroBtn}`}>
+              <a href="#deals" className={`btn btn-ghost btn-lg ${styles.heroBtnDesktop}`}>
                 Browse Deals ↓
               </a>
             </div>
-            {/* Stats row */}
+
+            {/* Stats — desktop only inside hero */}
             <div className={styles.stats}>
-              {[
-                { icon: <Shield size={15} />,    label: 'Verified today',     value: '120+' },
-                { icon: <Zap size={15} />,        label: 'Avg. discount',      value: '34%' },
-                { icon: <TrendingUp size={15} />, label: 'Saved by users',     value: '₦2.4M' },
-              ].map(s => (
+              {STATS.map(s => (
                 <div key={s.label} className={styles.stat}>
                   <div className={styles.statIcon}>{s.icon}</div>
                   <div>
@@ -88,7 +104,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right: trust cards */}
+          {/* Right: trust cards — desktop only */}
           <div className={styles.heroRight}>
             {TRUST_CARDS.map(card => (
               <div key={card.title} className={styles.trustCard}>
@@ -126,6 +142,8 @@ export default function HomePage() {
       {/* ── Deals section ── */}
       <section className={styles.dealsSection} id="deals">
         <div className={styles.container}>
+
+          {/* Filter bar */}
           <div className={styles.filterBar}>
             <div className={styles.filterLeft}>
               <div className={styles.pillGroup}>
