@@ -14,13 +14,13 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(59,130,246,.25), transparent);
+  background: radial-gradient(ellipse 60% 80% at 30% 50%, rgba(255,100,50,.15), transparent);
   pointer-events: none;
 }
 .heroInner {
-  max-width: 1280px;
+  max-width: 860px;
   margin: 0 auto;
-  padding: 4rem 1.25rem 3.5rem;
+  padding: 2.2rem 1.5rem 2rem;
   position: relative;
   z-index: 1;
 }
@@ -29,72 +29,72 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(59,130,246,.15);
-  border: 1px solid rgba(59,130,246,.3);
-  color: #93c5fd;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.25);
+  color: #fde8e8;
   font-size: .78rem;
   font-weight: 600;
   padding: .3rem .85rem;
   border-radius: 20px;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 }
 
 .heroTitle {
   font-family: var(--font-head);
-  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-size: clamp(1.75rem, 4vw, 2.8rem);
   font-weight: 800;
-  color: #f1f5f9;
+  color: #ffffff;
   line-height: 1.15;
-  margin-bottom: 1rem;
-  max-width: 620px;
+  margin-bottom: .85rem;
+  max-width: 600px;
 }
-.heroAccent { color: #60a5fa; }
+.heroAccent { color: #ffd4c2; }
 
 .heroSub {
-  font-size: clamp(.875rem, 2vw, 1rem);
-  color: #94a3b8;
-  max-width: 560px;
+  font-size: clamp(.85rem, 2vw, .95rem);
+  color: rgba(255,255,255,.75);
+  max-width: 520px;
   line-height: 1.7;
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.5rem;
 }
 
 .heroCtas {
   display: flex;
   flex-wrap: wrap;
   gap: .75rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
 }
-.heroBtn { min-width: 160px; }
+.heroBtn { min-width: 150px; }
 
 /* Stats */
 .stats {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 .stat {
   display: flex;
   align-items: center;
-  gap: .6rem;
+  gap: .55rem;
 }
 .statIcon {
-  width: 36px;
-  height: 36px;
-  background: rgba(59,130,246,.12);
-  border: 1px solid rgba(59,130,246,.2);
+  width: 34px;
+  height: 34px;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
   border-radius: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #60a5fa;
+  color: #ffd4c2;
   flex-shrink: 0;
 }
-.statValue { font-family: var(--font-head); font-size: 1rem; font-weight: 700; color: #f1f5f9; }
-.statLabel { font-size: .72rem; color: #64748b; }
+.statValue { font-family: var(--font-head); font-size: 1rem; font-weight: 700; color: #ffffff; }
+.statLabel { font-size: .72rem; color: rgba(255,255,255,.55); }
 
 /* ── Category cards ────────────────────────────────────── */
 .catSection {
-  padding: 2rem 0 0;
+  padding: 1.75rem 0 0;
 }
 .catGrid {
   display: grid;
@@ -107,7 +107,7 @@
   background: var(--surface);
   border: 2px solid var(--border);
   border-radius: var(--r-lg);
-  padding: 1.1rem .9rem;
+  padding: 1rem .9rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -117,7 +117,7 @@
   text-align: left;
 }
 .catCard:hover {
-  border-color: var(--blue-light);
+  border-color: var(--primary);
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
@@ -132,7 +132,7 @@
 
 /* ── Deals section ─────────────────────────────────────── */
 .dealsSection {
-  padding: 2rem 0 3rem;
+  padding: 1.75rem 0 3rem;
 }
 
 .filterBar {
@@ -167,7 +167,7 @@
   transition: all .15s;
   white-space: nowrap;
 }
-.pill:hover { border-color: var(--blue-light); color: var(--blue); }
+.pill:hover { border-color: var(--primary); color: var(--primary); }
 .pillActive {
   background: var(--primary);
   border-color: var(--primary);
@@ -187,7 +187,7 @@
   transition: border-color .15s;
   flex-shrink: 0;
 }
-.sortSelect:focus { border-color: var(--blue-light); }
+.sortSelect:focus { border-color: var(--primary); }
 
 .resultsHeader {
   display: flex;
@@ -209,7 +209,7 @@
 /* ── CTA section ───────────────────────────────────────── */
 .ctaSection {
   background: linear-gradient(135deg, #b91c1c, var(--primary));
-  padding: 3.5rem 1.25rem;
+  padding: 3rem 1.25rem;
 }
 .ctaInner {
   max-width: 540px;
