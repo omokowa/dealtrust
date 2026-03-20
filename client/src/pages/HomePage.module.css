@@ -285,3 +285,11 @@
   .catLabel { font-size: .65rem; font-weight: 700; }
   .catSubs { display: none; }
 }
+
+@media (max-width: 768px) {
+  .heroInner { padding: 1.25rem 1.1rem 1.5rem; gap: 0; }
+  .heroTitle  { font-size: 1.5rem; margin-bottom: .5rem; }
+  .heroSub    { font-size: .82rem; margin-bottom: 1rem; color: rgba(255,255,255,.78); }
+  .heroCtas   { display: none; }
+  .heroRight  { display: none; }
+}
