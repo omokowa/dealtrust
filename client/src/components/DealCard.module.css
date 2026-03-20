@@ -19,7 +19,6 @@
 .expired { opacity: .6; }
 .expired .revealBtn { cursor: not-allowed; }
 
-/* Image */
 .imageWrap {
   position: relative;
   width: 100%;
@@ -31,19 +30,16 @@
 .image {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   object-fit: contain;
   padding: .5rem;
   transition: transform .3s;
 }
 .card:hover .image { transform: scale(1.04); }
 
-/* Discount badge */
 .discountBadge {
   position: absolute;
-  top: .55rem;
-  left: .55rem;
+  top: .55rem; left: .55rem;
   background: #dc2626;
   color: #fff;
   font-weight: 700;
@@ -54,62 +50,42 @@
   box-shadow: 0 2px 6px rgba(220,38,38,.35);
 }
 
-/* Platform badge */
 .platformBadge {
   position: absolute;
-  bottom: .55rem;
-  left: .55rem;
-  font-size: .68rem;
+  bottom: .55rem; left: .55rem;
+  font-size: .75rem;
   font-weight: 700;
-  padding: .2rem .5rem;
+  padding: .25rem .65rem;
   border-radius: 6px;
+  background: rgba(255,255,255,.95);
+  color: var(--text);
+  box-shadow: 0 1px 4px rgba(0,0,0,.15);
 }
 
-/* Share button */
-.shareBtn {
-  position: absolute;
-  top: .55rem;
-  right: .55rem;
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  background: rgba(255,255,255,.9);
-  border: 1px solid rgba(0,0,0,.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text2);
-  opacity: 0;
-  transition: opacity .2s, background .15s;
-  backdrop-filter: blur(4px);
-}
-.card:hover .shareBtn { opacity: 1; }
-@media (pointer: coarse) { .shareBtn { opacity: 1; } }
-.shareBtn:hover { background: #fff; color: var(--blue); }
+/* Share button — hidden, no share yet */
+.shareBtn { display: none; }
 
-/* Body */
 .body {
-  padding: .85rem .9rem .9rem;
+  padding: .8rem .85rem .85rem;
   display: flex;
   flex-direction: column;
-  gap: .45rem;
+  gap: .4rem;
   flex: 1;
 }
 
 .title {
-  font-size: .9rem;
+  font-size: .88rem;
   font-weight: 600;
   line-height: 1.35;
   color: var(--text);
 }
 
 .summary {
-  font-size: .78rem;
+  font-size: .76rem;
   color: var(--text2);
   line-height: 1.5;
 }
 
-/* Prices */
 .prices {
   display: flex;
   align-items: baseline;
@@ -119,28 +95,25 @@
 }
 .currentPrice {
   font-family: var(--font-head);
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--text);
 }
 .originalPrice {
-  font-size: .82rem;
+  font-size: .8rem;
   color: var(--text3);
   text-decoration: line-through;
 }
 .saving {
-  font-size: .72rem;
+  font-size: .7rem;
   font-weight: 600;
   color: var(--green);
   background: var(--green-pale);
-  padding: .1rem .45rem;
+  padding: .1rem .4rem;
   border-radius: 5px;
 }
 
-/* Coupon */
-.couponRow {
-  margin-top: .1rem;
-}
+.couponRow { margin-top: .1rem; }
 .revealBtn {
   width: 100%;
   background: linear-gradient(135deg, #e8170d, #f97316);
@@ -174,7 +147,7 @@
 .couponCode {
   font-family: 'Courier New', monospace;
   font-weight: 700;
-  font-size: .9rem;
+  font-size: .88rem;
   letter-spacing: .05em;
   flex: 1;
 }
@@ -183,15 +156,14 @@
   color: #fff;
   border: none;
   border-radius: 5px;
-  padding: .2rem .55rem;
-  font-size: .72rem;
+  padding: .2rem .5rem;
+  font-size: .7rem;
   font-weight: 600;
   font-family: var(--font-body);
   transition: background .15s;
 }
 .copyBtn:hover { background: #047857; }
 
-/* Footer */
 .footer {
   display: flex;
   align-items: center;
@@ -200,17 +172,15 @@
   margin-top: auto;
   padding-top: .3rem;
 }
-
 .score {
   display: inline-flex;
   align-items: center;
   gap: 3px;
   font-size: .7rem;
   font-weight: 700;
-  padding: .15rem .45rem;
+  padding: .15rem .4rem;
   border-radius: 5px;
 }
-
 .verified {
   display: inline-flex;
   align-items: center;
@@ -219,23 +189,19 @@
   font-weight: 600;
   color: var(--green);
   background: var(--green-pale);
-  padding: .15rem .45rem;
+  padding: .15rem .4rem;
   border-radius: 5px;
 }
-
 .countdown {
   display: inline-flex;
   align-items: center;
   gap: 3px;
   font-size: .7rem;
   font-weight: 600;
-  color: var(--orange);
-  background: var(--orange-pale);
-  padding: .15rem .45rem;
+  color: var(--gold);
+  background: var(--gold-pale);
+  padding: .15rem .4rem;
   border-radius: 5px;
   margin-left: auto;
 }
-.countdownExpired {
-  color: var(--text3);
-  background: var(--surface2);
-}
+.countdownExpired { color: var(--text3); background: var(--surface2); }
