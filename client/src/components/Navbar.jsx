@@ -5,9 +5,8 @@ import { CATEGORIES } from '../utils/index.js'
 import styles from './Navbar.module.css'
 
 export default function Navbar() {
-  const [menuOpen,   setMenuOpen]   = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
-  const [q,          setQ]          = useState('')
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [q, setQ] = useState('')
   const navigate = useNavigate()
 
   function handleSearch(e) {
@@ -15,14 +14,14 @@ export default function Navbar() {
     if (!q.trim()) return
     navigate(`/search?q=${encodeURIComponent(q.trim())}`)
     setQ('')
-    setSearchOpen(false)
+    setMenuOpen(false)
   }
 
   return (
     <header className={styles.nav}>
-      <div className={styles.inner}>
 
-        {/* Logo */}
+      {/* ── Top bar: Logo + Bell + Hamburger ── */}
+      <div className={styles.inner}>
         <Link to="/" className={styles.logo}>
           <div className={styles.logoIcon}>
             <Tag size={16} color="#fff" strokeWidth={2.5} />
@@ -51,10 +50,9 @@ export default function Navbar() {
           />
         </form>
 
-        {/* Actions */}
         <div className={styles.actions}>
           <Link to="/alerts" className={styles.alertBtn} title="Deal Alerts">
-            <Bell size={18} />
+            <Bell size={20} />
           </Link>
           <button
             className={styles.menuBtn}
@@ -66,21 +64,26 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile search */}
+      {/* ── Mobile search bar — full width below top bar ── */}
       <div className={styles.mobileSearch}>
-        <form onSubmit={handleSearch} style={{ position: 'relative' }}>
-          <Search size={15} className={styles.searchIcon} />
-          <input
-            type="text"
-            placeholder="Search deals, brands, categories…"
-            value={q}
-            onChange={e => setQ(e.target.value)}
-            className={styles.searchInput}
-          />
+        <form onSubmit={handleSearch}>
+          <div className={styles.mobileSearchWrap}>
+            <Search size={15} className={styles.mobileSearchIcon} />
+            <input
+              type="text"
+              placeholder="Search deals, brands, categories…"
+              value={q}
+              onChange={e => setQ(e.target.value)}
+              className={styles.mobileSearchInput}
+            />
+            <button type="submit" className={styles.mobileSearchBtn}>
+              Search
+            </button>
+          </div>
         </form>
       </div>
 
-      {/* Mobile menu */}
+      {/* ── Mobile menu ── */}
       {menuOpen && (
         <div className={styles.mobileMenu}>
           {CATEGORIES.map(c => (
