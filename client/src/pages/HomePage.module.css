@@ -176,18 +176,7 @@
   flex-wrap: wrap;
   flex: 1;
 }
-.pillGroup { display: flex; gap: .35rem; flex-wrap: wrap; }
-.pill {
-  padding: .35rem .8rem;
-  border-radius: 20px;
-  font-size: .8rem;
-  font-weight: 500;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text2);
-  transition: all .15s;
-  white-space: nowrap;
-}
+
 .pill:hover { border-color: var(--primary); color: var(--primary); }
 .pillActive { background: var(--primary); border-color: var(--primary); color: #fff; }
 
@@ -293,3 +282,16 @@
   .heroCtas   { display: none; }
   .heroRight  { display: none; }
 }
+
+.pillGroup {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  gap: .4rem;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.pillGroup::-webkit-scrollbar { display: none; }
+.pill { flex-shrink: 0 !important; white-space: nowrap; }
