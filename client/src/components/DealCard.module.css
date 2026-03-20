@@ -95,9 +95,9 @@
 }
 .currentPrice {
   font-family: var(--font-head);
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--text);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--primary);
 }
 .originalPrice {
   font-size: .8rem;
