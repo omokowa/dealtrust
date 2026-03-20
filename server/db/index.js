@@ -7,7 +7,6 @@ const db = createClient({
   authToken: process.env.TURSO_AUTH_TOKEN   || undefined,
 });
 
-// ── Schema — run each statement individually (more compatible) ─
 async function initSchema() {
   const statements = [
     `CREATE TABLE IF NOT EXISTS deals (
@@ -74,10 +73,6 @@ async function initSchema() {
       user_agent TEXT,
       clicked_at TEXT DEFAULT (datetime('now'))
     )`,
-    `CREATE INDEX IF NOT EXISTS idx_deals_category ON deals(category)`,
-    `CREATE INDEX IF NOT EXISTS idx_deals_platform ON deals(platform)`,
-    `CREATE INDEX IF NOT EXISTS idx_deals_verified ON deals(verified)`,
-    `CREATE INDEX IF NOT EXISTS idx_price_deal     ON price_history(deal_id)`,
   ];
 
   for (const sql of statements) {
@@ -130,9 +125,8 @@ const queries = {
   }),
 
   insertDeal: (deal) => db.execute({
-    sql: `INSERT INTO deals (title, description, platform, category, sub_category, current_price, original_price, discount_pct, coupon_code, affiliate_url, image_url, product_url, verified, deal_score, expires_at)
-          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-          ON CONFLICT(affiliate_url) DO UPDATE SET current_price=excluded.current_price, discount_pct=excluded.discount_pct, updated_at=datetime('now')`,
+    sql: `INSERT OR IGNORE INTO deals (title, description, platform, category, sub_category, current_price, original_price, discount_pct, coupon_code, affiliate_url, image_url, product_url, verified, deal_score, expires_at)
+          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
     args: [deal.title, deal.description||null, deal.platform, deal.category, deal.sub_category||null, deal.current_price, deal.original_price, deal.discount_pct, deal.coupon_code||null, deal.affiliate_url, deal.image_url||null, deal.product_url||null, deal.verified?1:0, deal.deal_score||0, deal.expires_at||null],
   }),
 
