@@ -43,10 +43,14 @@ export function expiryCountdown(expiresAt) {
 
 // ── Category helpers ──────────────────────────────────────
 export const CATEGORIES = [
-  { slug: 'gadgets',     label: 'Gadgets',     icon: '📱', sub: ['Phones', 'Tablets', 'Computing', 'Accessories'] },
-  { slug: 'electronics', label: 'Electronics', icon: '⚡', sub: ['TVs', 'Audio', 'Cameras', 'Smart Home'] },
-  { slug: 'fashion',     label: 'Fashion',     icon: '👗', sub: ['Men', 'Women', 'Footwear', 'Bags'] },
-  { slug: 'appliances',  label: 'Appliances',  icon: '🏠', sub: ['Fridges', 'Washing', 'AC', 'Kitchen'] },
+  { slug: 'gadgets',     label: 'Gadgets',        icon: '📱', sub: ['Phones', 'Tablets', 'Computing', 'Accessories'] },
+  { slug: 'electronics', label: 'Electronics',    icon: '⚡', sub: ['TVs', 'Audio', 'Cameras', 'Smart Home'] },
+  { slug: 'fashion',     label: 'Fashion',        icon: '👗', sub: ['Men', 'Women', 'Footwear', 'Bags'] },
+  { slug: 'appliances',  label: 'Appliances',     icon: '🏠', sub: ['Fridges', 'Washing', 'AC', 'Kitchen'] },
+  { slug: 'health',      label: 'Health & Beauty',icon: '💄', sub: ['Skincare', 'Haircare', 'Vitamins', 'Fitness'] },
+  { slug: 'baby',        label: 'Baby Products',  icon: '🍼', sub: ['Feeding', 'Clothing', 'Toys', 'Diapers'] },
+  { slug: 'gaming',      label: 'Gaming',         icon: '🎮', sub: ['Consoles', 'Controllers', 'Games', 'Accessories'] },
+  { slug: 'supermarket', label: 'Supermarket',    icon: '🛒', sub: ['Food', 'Drinks', 'Household', 'Personal Care'] },
 ]
 
 export function getCategoryMeta(slug) {
