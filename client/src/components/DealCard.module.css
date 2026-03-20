@@ -14,7 +14,7 @@
 .card:hover {
   box-shadow: var(--shadow-md);
   transform: translateY(-3px);
-  border-color: #93c5fd;
+  border-color: #fca5a5;
 }
 .expired { opacity: .6; }
 .expired .revealBtn { cursor: not-allowed; }
@@ -143,7 +143,7 @@
 }
 .revealBtn {
   width: 100%;
-  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  background: linear-gradient(135deg, #e8170d, #f97316);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -155,8 +155,8 @@
   text-align: center;
 }
 .revealBtn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #1e40af, #1d4ed8);
-  box-shadow: 0 4px 12px rgba(29,78,216,.3);
+  background: linear-gradient(135deg, #b91c1c, #e8170d);
+  box-shadow: 0 4px 12px rgba(232,23,13,.3);
   transform: translateY(-1px);
 }
 .revealBtn:disabled { background: var(--border); color: var(--text3); cursor: not-allowed; transform: none; }
