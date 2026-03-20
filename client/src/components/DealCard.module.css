@@ -22,7 +22,7 @@
 .imageWrap {
   position: relative;
   width: 100%;
-  padding-bottom: 72%;
+  padding-bottom: 80%;
   background: var(--surface2);
   overflow: hidden;
   flex-shrink: 0;
@@ -95,7 +95,7 @@
 }
 .currentPrice {
   font-family: var(--font-head);
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 800;
   color: var(--primary);
 }
