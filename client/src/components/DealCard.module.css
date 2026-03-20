@@ -99,6 +99,17 @@
   font-weight: 800;
   color: var(--primary);
 }
+.savingBadge {
+  display: inline-block;
+  font-size: .7rem;
+  font-weight: 700;
+  color: var(--green);
+  background: var(--green-pale);
+  padding: .15rem .5rem;
+  border-radius: 5px;
+  width: fit-content;
+}
+
 .originalPrice {
   font-size: .8rem;
   color: var(--text3);
