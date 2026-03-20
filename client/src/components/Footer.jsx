@@ -16,10 +16,7 @@ export default function Footer() {
           <p className={styles.tagline}>
             Only verified deals with real price drops. No fake discounts. No expired coupons.
           </p>
-          <p className={styles.affiliate}>
-            DealTrust earns affiliate commissions when you click deal links and make a purchase.
-            This never affects the price you pay.
-          </p>
+          
         </div>
 
         <div className={styles.links}>
