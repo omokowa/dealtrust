@@ -89,12 +89,14 @@ async function generateMissingSummaries(limit = 20) {
   if (!process.env.GROQ_API_KEY) return;
 
   try {
-    const result = await require('../db').db.execute({
-      sql: `SELECT id, title, category, platform, current_price, original_price, discount_pct, coupon_code
-            FROM deals WHERE ai_summary IS NULL AND verified = 1
-            ORDER BY deal_score DESC LIMIT ?`,
-      args: [limit],
-    });
+
+    const { db } = require('../db');
+    const result = await db.query(
+      `SELECT id, title, category, platform, current_price, original_price, discount_pct, coupon_code
+       FROM deals WHERE ai_summary IS NULL AND verified = true
+       ORDER BY deal_score DESC LIMIT $1`,
+      [limit]
+    );
 
     const deals = result.rows;
     if (!deals.length) {
