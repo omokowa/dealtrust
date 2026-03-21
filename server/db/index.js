@@ -185,6 +185,8 @@ const queries = {
     return { rows: rows(result) };
   },
 
+if (deal.current_price > 10000000) return { rows: [] }; // Skip prices over ₦10M — likely corrupted
+  
   insertDeal: async (deal) => {
     try {
       const result = await query(
