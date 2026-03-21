@@ -1,40 +1,27 @@
 {
-  "name": "dealtrust-server",
+  "name": "dealtrust-api",
   "version": "1.0.0",
-  "type": "commonjs",
+  "description": "DealTrust backend API",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev":   "nodemon index.js"
+    "dev": "nodemon index.js"
   },
   "dependencies": {
-    "express":        "^4.19.2",
-    "cors":           "^2.8.5",
-    "helmet":         "^7.1.0",
-    "dotenv":         "^16.4.5",
-    "axios":          "^1.7.2",
-    "cheerio":        "^1.0.0",
-    "groq-sdk":       "^0.5.0",
-    "@libsql/client": "^0.6.2",
-    "node-cache":     "^5.1.2",
-    "node-cron":      "^3.0.3",
-    "resend":         "^3.4.0",
+    "express":            "^4.19.2",
+    "cors":               "^2.8.5",
+    "helmet":             "^7.1.0",
+    "dotenv":             "^16.4.5",
+    "axios":              "^1.7.2",
+    "cheerio":            "^1.0.0",
+    "groq-sdk":           "^0.5.0",
+    "@libsql/client":     "^0.6.2",
+    "node-cache":         "^5.1.2",
+    "node-cron":          "^3.0.3",
+    "resend":             "^3.4.0",
     "express-rate-limit": "^7.3.1",
-    "express-validator":  "^7.1.0"
-
-"pg": "^8.11.3",
-```
-
-**Step 2 — Upload the new db file**
-
-Download `db_index.js` → go to GitHub → `server` → `db` → `index.js` → pencil ✏️ → Ctrl+A → delete → paste the entire content → Commit.
-
-**Step 3 — Update Render environment**
-
-Go to Render → Environment → find `TURSO_DATABASE_URL` → change value to just:
-```
-file:./dealtrust.db
-    
+    "express-validator":  "^7.1.0",
+    "pg":                 "^8.11.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"
