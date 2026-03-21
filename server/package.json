@@ -21,6 +21,20 @@
     "resend":         "^3.4.0",
     "express-rate-limit": "^7.3.1",
     "express-validator":  "^7.1.0"
+
+"pg": "^8.11.3",
+```
+
+**Step 2 — Upload the new db file**
+
+Download `db_index.js` → go to GitHub → `server` → `db` → `index.js` → pencil ✏️ → Ctrl+A → delete → paste the entire content → Commit.
+
+**Step 3 — Update Render environment**
+
+Go to Render → Environment → find `TURSO_DATABASE_URL` → change value to just:
+```
+file:./dealtrust.db
+    
   },
   "devDependencies": {
     "nodemon": "^3.1.4"
