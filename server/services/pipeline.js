@@ -1,17 +1,13 @@
 // services/pipeline.js — The full data pipeline
-// Scrape → Verify → Save → Generate AI Summaries → Send Alerts
-// Called by cron scheduler every 6 hours
-
-const { scrapeJumia }   = require('../scrapers/jumia');
-const { scrapeKonga }   = require('../scrapers/konga');
-const { scrapeTemu }    = require('../scrapers/temu');
-const { verifyDeal }    = require('./verify');
+const { scrapeJumia }  = require('../scrapers/jumia');
+const { scrapeKonga }  = require('../scrapers/konga');
+const { scrapeTemu }   = require('../scrapers/temu');
+const { verifyDeal }   = require('./verify');
 const { generateMissingSummaries } = require('./aiSummary');
 const { sendDealAlerts } = require('./alerts');
-const { queries }       = require('../db');
-const logger            = require('../utils/logger');
+const { queries, db }  = require('../db');
+const logger           = require('../utils/logger');
 
-// ── Run the full pipeline ──────────────────────────────────
 async function runPipeline(options = {}) {
   const startTime  = Date.now();
   const categories = options.categories || ['gadgets', 'electronics', 'fashion', 'appliances'];
@@ -23,57 +19,29 @@ async function runPipeline(options = {}) {
   logger.info(`   Platforms:  ${platforms.join(', ')}`);
   logger.info('═══════════════════════════════════════════');
 
-  const stats = {
-    scraped:  0,
-    saved:    0,
-    verified: 0,
-    rejected: 0,
-    errors:   0,
-    newDeals: [],
-  };
+  const stats = { scraped: 0, saved: 0, verified: 0, rejected: 0, errors: 0, newDeals: [] };
 
   try {
-    // ── STEP 1: Scrape all platforms ───────────────────────
+    // ── STEP 1: Scrape ─────────────────────────────────────
     let rawDeals = [];
-
-    if (platforms.includes('jumia')) {
-      const jumiaDeals = await scrapeJumia(categories);
-      rawDeals.push(...jumiaDeals);
-    }
-
-    if (platforms.includes('konga')) {
-      const kongaDeals = await scrapeKonga(categories);
-      rawDeals.push(...kongaDeals);
-    }
-
-    if (platforms.includes('temu')) {
-      const temuDeals = await scrapeTemu(categories);
-      rawDeals.push(...temuDeals);
-    }
+    if (platforms.includes('jumia')) rawDeals.push(...await scrapeJumia(categories));
+    if (platforms.includes('konga')) rawDeals.push(...await scrapeKonga(categories));
+    if (platforms.includes('temu'))  rawDeals.push(...await scrapeTemu(categories));
 
     stats.scraped = rawDeals.length;
     logger.info(`\n📦 Total scraped: ${stats.scraped} deals`);
 
-    // ── STEP 2: Save to database ───────────────────────────
+    // ── STEP 2: Save ───────────────────────────────────────
     logger.info('\n💾 Saving deals to database…');
 
     for (const deal of rawDeals) {
       try {
         const result = await queries.insertDeal(deal);
-
-        // Get the deal ID (inserted or existing)
-        const dealId = result.lastInsertRowid
-          ? Number(result.lastInsertRowid)
-          : await getDealIdByUrl(deal.affiliate_url);
-
+        const dealId = result.rows?.[0]?.id || await getDealIdByUrl(deal.affiliate_url);
         if (!dealId) continue;
-
-        // Save current price to history
         await queries.insertPriceHistory(dealId, deal.current_price, true);
-
         stats.saved++;
         deal.id = dealId;
-
       } catch (err) {
         stats.errors++;
         logger.error(`[Pipeline] Save error: ${err.message}`);
@@ -82,25 +50,18 @@ async function runPipeline(options = {}) {
 
     logger.info(`✅ Saved: ${stats.saved} deals`);
 
-    // ── STEP 3: Verify deals ───────────────────────────────
+    // ── STEP 3: Verify ─────────────────────────────────────
     logger.info('\n🔍 Running verification engine…');
 
-    // Get all unverified deals from DB for verification
-    const unverifiedResult = await require('../db').db.execute({
-      sql: `SELECT d.*, c.success_count, c.fail_count
-            FROM deals d
-            LEFT JOIN coupons c ON c.deal_id = d.id
-            WHERE d.updated_at >= datetime('now', '-2 hours')
-            ORDER BY d.created_at DESC`,
-      args: [],
-    });
+    const unverifiedResult = await db.query(
+      `SELECT * FROM deals WHERE updated_at >= NOW() - INTERVAL '2 hours' ORDER BY created_at DESC`
+    );
 
     for (const deal of unverifiedResult.rows) {
       try {
         const result = await verifyDeal(deal);
         if (result.verified) {
           stats.verified++;
-          // Track new verified deals for alert sending
           const isNew = rawDeals.some(r => r.id === deal.id);
           if (isNew) stats.newDeals.push(deal);
         } else {
@@ -113,23 +74,21 @@ async function runPipeline(options = {}) {
 
     logger.info(`✅ Verified: ${stats.verified} | ❌ Rejected: ${stats.rejected}`);
 
-    // ── STEP 4: Generate AI summaries ──────────────────────
+    // ── STEP 4: AI Summaries ───────────────────────────────
     logger.info('\n🤖 Generating AI summaries…');
-    await generateMissingSummaries(20); // Max 20 per run to stay in free tier
+    await generateMissingSummaries(20);
 
-    // ── STEP 5: Send deal alerts ───────────────────────────
+    // ── STEP 5: Alerts ─────────────────────────────────────
     if (stats.newDeals.length > 0) {
       logger.info(`\n📧 Sending alerts for ${stats.newDeals.length} new verified deals…`);
       await sendDealAlerts(stats.newDeals);
     }
 
-    // ── STEP 6: Cleanup old data (weekly) ──────────────────
-    const dayOfWeek = new Date().getDay();
-    if (dayOfWeek === 0) { // Sundays only
+    // ── STEP 6: Cleanup (Sundays only) ─────────────────────
+    if (new Date().getDay() === 0) {
       logger.info('\n🧹 Running weekly cleanup…');
       await queries.cleanOldPriceHistory();
       await queries.cleanExpiredDeals();
-      logger.info('✅ Cleanup complete');
     }
 
     const duration = ((Date.now() - startTime) / 1000).toFixed(1);
@@ -148,10 +107,9 @@ async function runPipeline(options = {}) {
 
 async function getDealIdByUrl(affiliateUrl) {
   try {
-    const result = await require('../db').db.execute({
-      sql:  `SELECT id FROM deals WHERE affiliate_url = ? LIMIT 1`,
-      args: [affiliateUrl],
-    });
+    const result = await db.query(
+      `SELECT id FROM deals WHERE affiliate_url = $1 LIMIT 1`, [affiliateUrl]
+    );
     return result.rows[0]?.id || null;
   } catch { return null; }
 }
