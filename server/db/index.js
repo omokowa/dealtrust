@@ -2,7 +2,6 @@
 require('dotenv').config();
 const { Pool } = require('pg');
 
-// ── Connection ────────────────────────────────────────────
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || process.env.TURSO_DATABASE_URL,
   ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false,
@@ -15,7 +14,6 @@ pool.on('error', (err) => {
   console.error('Database pool error:', err.message);
 });
 
-// Helper to run queries
 async function query(sql, params = []) {
   const client = await pool.connect();
   try {
@@ -26,7 +24,6 @@ async function query(sql, params = []) {
   }
 }
 
-// ── Schema ────────────────────────────────────────────────
 async function initSchema() {
   const statements = [
     `CREATE TABLE IF NOT EXISTS deals (
@@ -94,10 +91,10 @@ async function initSchema() {
       user_agent TEXT,
       clicked_at TIMESTAMPTZ DEFAULT NOW()
     )`,
-    `CREATE INDEX IF NOT EXISTS idx_deals_category    ON deals(category)`,
-    `CREATE INDEX IF NOT EXISTS idx_deals_platform    ON deals(platform)`,
-    `CREATE INDEX IF NOT EXISTS idx_deals_verified    ON deals(verified)`,
-    `CREATE INDEX IF NOT EXISTS idx_price_deal        ON price_history(deal_id)`,
+    `CREATE INDEX IF NOT EXISTS idx_deals_category ON deals(category)`,
+    `CREATE INDEX IF NOT EXISTS idx_deals_platform ON deals(platform)`,
+    `CREATE INDEX IF NOT EXISTS idx_deals_verified ON deals(verified)`,
+    `CREATE INDEX IF NOT EXISTS idx_price_deal     ON price_history(deal_id)`,
   ];
 
   for (const sql of statements) {
@@ -112,20 +109,10 @@ async function initSchema() {
   console.log('✅ Database schema ready (PostgreSQL/Neon)');
 }
 
-// ── Query helpers ─────────────────────────────────────────
-// Convert SQLite ? placeholders to PostgreSQL $1, $2...
-function pg(sql, args = []) {
-  let i = 0;
-  const pgSql = sql.replace(/\?/g, () => `$${++i}`);
-  return query(pgSql, args);
-}
-
-// Normalize rows — PostgreSQL returns real booleans, ensure compatibility
 function rows(result) {
   return result?.rows || [];
 }
 
-// ── Queries ───────────────────────────────────────────────
 const queries = {
 
   getDeals: async ({ category, platform, sort = 'newest', limit = 40, offset = 0 }) => {
@@ -185,9 +172,10 @@ const queries = {
     return { rows: rows(result) };
   },
 
-if (deal.current_price > 10000000) return { rows: [] }; // Skip prices over ₦10M — likely corrupted
-  
   insertDeal: async (deal) => {
+    if (deal.current_price > 10000000 || deal.original_price > 15000000) {
+      return { rows: [] };
+    }
     try {
       const result = await query(
         `INSERT INTO deals (title, description, platform, category, sub_category, current_price, original_price, discount_pct, coupon_code, affiliate_url, image_url, product_url, verified, deal_score, expires_at)
@@ -298,10 +286,10 @@ if (deal.current_price > 10000000) return { rows: [] }; // Skip prices over ₦1
   getStats: async () => {
     const result = await query(`
       SELECT
-        (SELECT COUNT(*) FROM deals WHERE verified=true)::int                                    as total_deals,
+        (SELECT COUNT(*) FROM deals WHERE verified=true)::int as total_deals,
         (SELECT COUNT(*) FROM deals WHERE verified=true AND created_at >= NOW() - INTERVAL '1 day')::int as deals_today,
-        (SELECT ROUND(AVG(discount_pct)) FROM deals WHERE verified=true)::int                    as avg_discount,
-        (SELECT COUNT(*) FROM alerts WHERE active=true)::int                                     as total_subscribers
+        (SELECT ROUND(AVG(discount_pct)) FROM deals WHERE verified=true)::int as avg_discount,
+        (SELECT COUNT(*) FROM alerts WHERE active=true)::int as total_subscribers
     `);
     return { rows: rows(result) };
   },
